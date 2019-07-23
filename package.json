@@ -1,7 +1,7 @@
 {
   "name": "teocratic-wall",
   "productName": "TeocraticWall",
-  "version": "0.17.1",
+  "version": "0.1.1",
   "description": "Teocratic wall app based on Electron application boilerplate.",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -56,8 +56,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "TeocraticWall",
+    "appId": "org.develar.TeocraticWall",
     "files": [
       "app/dist/",
       "app/app.html",
