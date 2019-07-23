@@ -1,9 +1,9 @@
 import React from 'react';
-import Dashboard from '../../components/Dashboard/Dashboard';
+import Home from '../../components/Home/Home';
 
 class DashboardPage extends React.Component {
   render() {
-    return <Dashboard />;
+    return <Home />;
   }
 }
 

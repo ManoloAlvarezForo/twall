@@ -7,14 +7,14 @@ import Error404 from '../components/Error404/Error404';
 import AuthenticationPage from '../containers/AuthenticationPage/AuthenticationPage';
 
 // Containers.
-import DashboardPage from '../containers/DashboardPage/DashboardPage';
+import HomePage from '../containers/HomePage/HomePage';
 // import ApplicantsPage from '../containers/ApplicantsPage/ApplicantsPage';
 // import TemplatePage from '../containers/TemplatePage/TemplatePage';
 // import SettingsPage from '../containers/SettingsPage/SettingsPage';
 // import TopicsPage from '../containers/TopicsPage/TopicsPage';
 // import ProfilePage from '../containers/ProfilePage/ProfilePage';
 // import UsersPage from '../containers/UsersPage/UsersPage';
-// import SchedulerPage from '../containers/ScheluderPage/ScheluderPage';
+import SchedulerPage from '../containers/ScheluderPage/ScheluderPage';
 // import NotificationsPage from '../containers/NotificationPage/NotificationPage';
 // import SalesPage from '../containers/SalesPage/SalesPage';
 
@@ -28,7 +28,13 @@ const Routes = () => {
       <AuthRoute
         exact
         path="/"
-        component={DashboardPage}
+        component={HomePage}
+        container={DrawerWrapper}
+      />
+      <AuthRoute
+        exact
+        path="/scheduler"
+        component={SchedulerPage}
         container={DrawerWrapper}
       />
       <AuthRoute component={Error404} />

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withRouter } from 'react-router';
+import MiniDrawer from './MiniDrawer';
 
 const styles = () => ({
   root: {
@@ -38,6 +39,7 @@ class DrawerWrapper extends React.Component {
       <div className={[classes.beforeRoot, 'app-wrapper-web'].join(' ')}>
         <div className={[classes.root, '_3dqpi'].join(' ')}>
           <CssBaseline />
+          <MiniDrawer />
           <div className={classes.mainContent}>
             <main className={classes.content}>
               <Body />
