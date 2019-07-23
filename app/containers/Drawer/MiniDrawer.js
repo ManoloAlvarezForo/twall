@@ -7,14 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import { FiChevronLeft } from 'react-icons/fi';
+import { IoIosCube } from 'react-icons/io';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import DrawerList from './DrawerList';
-import {
-  APP_NAME_SHORT,
-  APP_NAME_SMALL,
-  PLUS
-} from '../../constants/constants';
+import { APP_NAME_SHORT, APP_NAME_SMALL } from '../../constants/constants';
 
 const DRAWER_WIDTH = 220;
 
@@ -86,13 +83,15 @@ class MiniDrawer extends React.Component {
                     <Typography
                       style={{
                         color: '#e91e63',
-                        fontFamily: 'Pacifico',
-                        fontSize: '1.5rem',
-                        fontWeight: 'normal'
+                        fontSize: '2rem',
+                        fontWeight: 'normal',
+                        marginLeft: '15px',
+                        marginBottom: 0,
+                        marginTop: '10px'
                       }}
                       variant="h4"
                     >
-                      +
+                      <IoIosCube />
                     </Typography>
                   </div>
                 ) : (
@@ -110,24 +109,13 @@ class MiniDrawer extends React.Component {
                     >
                       <Typography
                         style={{
-                          fontFamily: 'Pacifico',
-                          fontSize: '1.5rem',
-                          fontWeight: 'normal'
-                        }}
-                        variant="h4"
-                      >
-                        {APP_NAME_SHORT}
-                      </Typography>
-                      <Typography
-                        style={{
                           color: '#e91e63',
-                          fontFamily: 'Pacifico',
-                          fontSize: '1.5rem',
-                          fontWeight: 'normal'
+                          fontSize: '2.5rem',
+                          marginTop: '10px'
                         }}
                         variant="h4"
                       >
-                        {PLUS}
+                        <IoIosCube />
                       </Typography>
                     </div>
                   </div>

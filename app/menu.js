@@ -48,14 +48,14 @@ export default class MenuBuilder {
       label: 'Electron',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About TeocraticWall',
           selector: 'orderFrontStandardAboutPanel:'
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide TeocraticWall',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
@@ -117,18 +117,18 @@ export default class MenuBuilder {
         }
       ]
     };
-    const subMenuViewProd = {
-      label: 'View',
-      submenu: [
-        {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
-          click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-          }
-        }
-      ]
-    };
+    // const subMenuViewProd = {
+    //   label: 'View',
+    //   submenu: [
+    //     {
+    //       label: 'Toggle Full Screen',
+    //       accelerator: 'Ctrl+Command+F',
+    //       click: () => {
+    //         this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+    //       }
+    //     }
+    //   ]
+    // };
     const subMenuWindow = {
       label: 'Window',
       submenu: [
@@ -174,9 +174,10 @@ export default class MenuBuilder {
       ]
     };
 
-    const subMenuView =
-      process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
+    // const subMenuView =
+    //   process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
 
+    const subMenuView = subMenuViewDev;
     return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
   }
 
