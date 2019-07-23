@@ -11,6 +11,7 @@ import MonthOptions from './MonthOptions';
 import DialogForm from './DialogForm';
 import AddEventComponent from './AddEventComponent';
 import { getWeekOptionsLabel } from './CalendarTools';
+import MonthCalendar from './MonthCalendar';
 
 moment.locale('es');
 
@@ -136,7 +137,7 @@ const Scheduler = () => {
         response = React.lazy(() => import('./WeekCalendar'));
         break;
       case 'month':
-        response = React.lazy(() => import('./MonthCalendar'));
+        response = MonthCalendar;
         break;
       default:
         break;
