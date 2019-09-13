@@ -8,9 +8,9 @@ import Select from '@material-ui/core/Select';
 import PropsTypes from 'prop-types';
 import CustomToolBar from '../CustomToolBar/CustomToolBar';
 import MonthOptions from './MonthOptions';
-import DialogForm from './DialogForm';
-import AddEventComponent from './AddEventComponent';
-import { getWeekOptionsLabel } from './CalendarTools';
+import DialogFormOptions from './DialogFormOptions';
+// import AddEventComponent from './AddEventComponent';
+// import { getWeekOptionsLabel } from './CalendarTools';
 import MonthCalendar from './MonthCalendar';
 
 moment.locale('es');
@@ -33,8 +33,7 @@ moment.locale('es');
 // <MenuItem value={'week'}>Week</MenuItem>
 
 const CalendarOptions = ({ setCalendarType, options }) => {
-  // const [value, setValue] = useState(2);
-  const [locale] = useState(moment().locale());
+  const [currentDay] = useState(moment().format('dddd LL'));
   const [type, setType] = useState('month');
 
   const handleChange = newValue => {
@@ -47,7 +46,7 @@ const CalendarOptions = ({ setCalendarType, options }) => {
       style={{
         display: 'flex',
         flexDirection: 'row',
-        width: '80%',
+        width: '90%',
         justifyContent: 'flex-start'
       }}
     >
@@ -55,15 +54,16 @@ const CalendarOptions = ({ setCalendarType, options }) => {
         style={{
           display: 'flex',
           alignItems: 'center',
-          width: '30%',
+          width: '40%',
           justifyContent: 'center'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Typography style={{ margin: 0 }} variant="subtitle1" gutterBottom>
-            {moment()
-              .locale(locale)
-              .format('LL')}
+          <Typography
+            style={{ margin: 0, fontWeight: 'bold', fontSize: '1.2rem' }}
+            gutterBottom
+          >
+            {currentDay.charAt(0).toUpperCase() + currentDay.slice(1)}
           </Typography>
         </div>
       </div>
@@ -74,7 +74,7 @@ const CalendarOptions = ({ setCalendarType, options }) => {
           displayEmpty
           name="type"
         >
-          <MenuItem value="month">Month</MenuItem>
+          <MenuItem value="month">Mes</MenuItem>
         </Select>
       </FormControl>
       {options}
@@ -97,6 +97,7 @@ const Scheduler = () => {
   mainDate.startOf(mainDate.year());
   const [selectedCalendar, setSelectedCalendar] = useState('month');
   const [data, setData] = useState(mainDate);
+  // const [openFullScreenDialog, setOpenFullScreenDialog] = useState(false);
 
   const next = type => {
     setData(getNewData(type, 'add'));
@@ -113,12 +114,12 @@ const Scheduler = () => {
       case 'month':
         response = data.clone()[action](1, 'month');
         break;
-      case 'week':
-        response = data.clone()[action](1, 'week');
-        break;
-      case 'day':
-        response = data.clone()[action](1, 'days');
-        break;
+      // case 'week':
+      //   response = data.clone()[action](1, 'week');
+      //   break;
+      // case 'day':
+      //   response = data.clone()[action](1, 'days');
+      //   break;
       default:
         break;
     }
@@ -130,12 +131,13 @@ const Scheduler = () => {
     let response = {};
 
     switch (type) {
-      case 'day':
-        response = React.lazy(() => import('./DayCalendar'));
-        break;
-      case 'week':
-        response = React.lazy(() => import('./WeekCalendar'));
-        break;
+      // TODO: That code to use other calendars.
+      // case 'day':
+      //   response = lazy(() => import('./DayCalendar'));
+      //   break;
+      // case 'week':
+      //   response = lazy(() => import('./WeekCalendar'));
+      //   break;
       case 'month':
         response = MonthCalendar;
         break;
@@ -146,22 +148,43 @@ const Scheduler = () => {
     return response;
   };
 
-  const calculateWeekLabel = () => {
-    const { startDate, endDate } = getWeekOptionsLabel(data);
-    return `${startDate.format('MMMM DD YYYY')} - ${endDate.format(
-      'MMMM DD YYYY'
-    )}`;
+  const getCalendarOptions = type => {
+    let response = {};
+
+    switch (type) {
+      // TODO: Use that code for other calendar type options.
+      // case 'day':
+      //   response = lazy(() => import('./DayOptions'));
+      //   break;
+      // case 'week':
+      //   response = lazy(() => import('./WeekOptions'));
+      //   break;
+      case 'month':
+        response = MonthOptions;
+        break;
+      default:
+        break;
+    }
+
+    return response;
   };
+
+  // const calculateWeekLabel = () => {
+  //   const { startDate, endDate } = getWeekOptionsLabel(data);
+  //   return `${startDate.format('MMMM DD YYYY')} - ${endDate.format(
+  //     'MMMM DD YYYY'
+  //   )}`;
+  // };
 
   const getOptionLabel = () => {
     let response = '';
     switch (selectedCalendar) {
-      case 'day':
-        response = data.format('MMMM DD YYYY');
-        break;
-      case 'week':
-        response = calculateWeekLabel();
-        break;
+      // case 'day':
+      //   response = data.format('MMMM DD YYYY');
+      //   break;
+      // case 'week':
+      //   response = calculateWeekLabel();
+      //   break;
       case 'month':
         response = data.format('MMMM YYYY');
         break;
@@ -172,25 +195,31 @@ const Scheduler = () => {
     return response;
   };
 
+  // const handleDialogs = (isOpen, dialogType) => {
+  //   switch (dialogType) {
+  //     case 'preaching':
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
   const Calendar = getCalendar(selectedCalendar);
+  const Options = getCalendarOptions(selectedCalendar);
   const optionLabel = getOptionLabel();
 
   return (
     <div>
       <CustomToolBar
         title="Eventos"
-        additional={
+        additionalComponent={
           <CalendarOptions
+            label={`${data.format('MMMM')} ${data.format('YYYY')}`}
             setCalendarType={setSelectedCalendar}
             options={
-              <MonthOptions
-                label={optionLabel}
-                next={next}
-                previous={previous}
-              />
+              <Options label={optionLabel} next={next} previous={previous} />
             }
             previous={previous}
-            label={`${data.format('MMMM')} ${data.format('YYYY')}`}
           />
         }
       />
@@ -198,11 +227,7 @@ const Scheduler = () => {
         <Paper elevation={1} style={styles.paper}>
           <div style={styles.calendarContainer}>
             <Suspense fallback={<div>Loading...</div>}>
-              <Calendar
-                data={data}
-                dialogForm={DialogForm}
-                dialogContent={AddEventComponent}
-              />
+              <Calendar data={data} optionsDialog={DialogFormOptions} />
             </Suspense>
           </div>
         </Paper>

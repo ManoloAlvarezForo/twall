@@ -19,7 +19,15 @@ const MonthOptions = ({ label, previous, next }) => {
         <div
           style={{ display: 'flex', alignItems: 'center', margin: '0 10px' }}
         >
-          <Typography style={{ margin: 0 }} variant="subtitle1" gutterBottom>
+          <Typography
+            style={{
+              margin: 0,
+              textTransform: 'capitalize',
+              fontSize: '1.2rem',
+              fontWeight: 'bold'
+            }}
+            gutterBottom
+          >
             {label}
           </Typography>
         </div>
@@ -45,15 +53,9 @@ const MonthOptions = ({ label, previous, next }) => {
 };
 
 MonthOptions.propTypes = {
-  label: PropTypes.string,
-  previous: PropTypes.func,
-  next: PropTypes.func
-};
-
-MonthOptions.defaultProps = {
-  label: '',
-  previous: () => {},
-  next: () => {}
+  label: PropTypes.string.isRequired,
+  previous: PropTypes.func.isRequired,
+  next: PropTypes.func.isRequired
 };
 
 export default MonthOptions;

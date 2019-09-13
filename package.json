@@ -1,8 +1,8 @@
 {
-  "name": "teocratic-wall",
-  "productName": "TeocraticWall",
+  "name": "theocratic-wall",
+  "productName": "TheocraticWall",
   "version": "0.1.1",
-  "description": "Teocratic wall app based on Electron application boilerplate.",
+  "description": "Theocratic wall app based on Electron application boilerplate.",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -56,8 +56,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "TeocraticWall",
-    "appId": "org.develar.TeocraticWall",
+    "productName": "TheocraticWall",
+    "appId": "org.develar.TheocraticWall",
     "files": [
       "app/dist/",
       "app/app.html",
