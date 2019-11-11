@@ -161,14 +161,14 @@ const styles = theme => ({
   paper: {
     position: 'absolute',
     zIndex: 3,
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(),
     left: 0,
     right: 0,
     maxHeight: '225px',
     overflow: 'auto'
   },
   chip: {
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+    margin: `${theme.spacing() / 2}px ${theme.spacing() / 4}px`,
     height: '27px'
   },
   inputRoot: {
@@ -180,7 +180,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   divider: {
-    height: theme.spacing.unit * 2
+    height: theme.spacing() * 2
   }
 });
 

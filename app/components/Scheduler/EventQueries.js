@@ -4,17 +4,37 @@ import gql from 'graphql-tag';
  * GraphQL Query to gets the Calendar Events by a month and locale params from the Server.
  */
 export const GET_EVENTS_BY_MONTH = gql`
-  query getCalendarEventsByMonth(
-    $month: String
-    $year: String
-    $locale: String
-  ) {
-    calendarEventsByMonth(month: $month, year: $year, locale: $locale) {
+  query getEventsByMonth($month: String, $year: String, $locale: String) {
+    getEventsByMonth(month: $month, year: $year, locale: $locale) {
       date
       events {
-        id
-        title
-        timeFrom
+        ... on Preaching {
+          __typename
+          id
+          lead
+          territories
+          title
+          date
+          time
+          location
+          description
+          moment
+          type
+        }
+        ... on PublicMeeting {
+          __typename
+          id
+          title
+          date
+          time
+          location
+          meetingType
+          president
+          speaker
+          watchtowerGuider
+          watchtowerReader
+          type
+        }
       }
     }
   }
@@ -23,15 +43,34 @@ export const GET_EVENTS_BY_MONTH = gql`
  * GraphQL Query to gets Calendar Events by a date from and a date to with format "YYYY-MM-DD" from the Server.
  */
 export const GET_EVENTS_BY_DATE = gql`
-  query getEventsByDate($from: String, $to: String) {
-    eventsByDate(from: $from, to: $to) {
+  query getEventsByDate($fromDate: String, $toDate: String) {
+    getEventsByDate(fromDate: $fromDate, toDate: $toDate) {
       date
       events {
-        id
-        title
-        date
-        timeFrom
-        timeTo
+        ... on Preaching {
+          __typename
+          id
+          lead
+          territories
+          title
+          date
+          time
+          location
+          description
+        }
+        ... on PublicMeeting {
+          __typename
+          id
+          title
+          date
+          time
+          location
+          meetingType
+          president
+          speaker
+          watchtowerGuider
+          watchtowerReader
+        }
       }
     }
   }

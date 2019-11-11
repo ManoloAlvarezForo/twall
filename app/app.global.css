@@ -184,14 +184,47 @@ body {
   background-color: rgba(106, 115, 138, 0.13);
 }
 
-.event-calendar {
+/* Preaching morning styles */
+.preaching-morning {
   cursor: pointer;
-  background-color: rgb(15, 168, 187);
-  border-left: 7px solid rgb(106, 115, 138);
+  background-color: #8bc34a;
 }
 
-.event-calendar:hover {
+.preaching-morning:hover {
+  background-color: #aad874;
+  border-radius: 3px;
+}
+
+/* Preaching afternoon styles */
+.preaching-afternoon {
+  cursor: pointer;
+  background-color: #ff9800;
+}
+
+.preaching-afternoon:hover {
+  background-color: #f5bc68;
+  border-radius: 3px;
+}
+
+/* Preaching night styles */
+.preaching-night {
+  cursor: pointer;
+  background-color: rgb(15, 168, 187);
+}
+
+.preaching-night:hover {
   background-color: #13b9cc;
+  border-radius: 3px;
+}
+
+/* Preaching night styles */
+.meeting-pm {
+  cursor: pointer;
+  background-color: #e91e63;
+}
+
+.meeting-pm:hover {
+  background-color: #c70044;
   border-radius: 3px;
 }
 
@@ -267,8 +300,8 @@ body {
 .auth-form-container {
   /* background-color: #414755; */
   background-color: none;
-  border: 2px dashed #616161;
-  border-radius: 0 30px 0 30px;
+  border: 1px solid #616161;
+  border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   align-self: center;
   display: flex;

@@ -34,7 +34,7 @@ const FormDialog = ({
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-      <DialogContent>
+      <DialogContent dividers>
         <Content selectedDate={selectedDate} setData={setData} />
       </DialogContent>
       <DialogActions style={{ margin: '25px' }}>
@@ -67,7 +67,7 @@ FormDialog.propTypes = {
 };
 
 FormDialog.defaultProps = {
-  title: '',
+  title: 'Title',
   content: {},
   dataModel: {},
   open: false,

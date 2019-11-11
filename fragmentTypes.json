@@ -1,0 +1,21 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "EventInterface",
+        "possibleTypes": [{ "name": "Preaching" }, { "name": "PublicMeeting" }]
+      },
+      {
+        "kind": "UNION",
+        "name": "Event",
+        "possibleTypes": [{ "name": "Preaching" }, { "name": "PublicMeeting" }]
+      },
+      {
+        "kind": "UNION",
+        "name": "Events",
+        "possibleTypes": [{ "name": "Preaching" }, { "name": "PublicMeeting" }]
+      }
+    ]
+  }
+}

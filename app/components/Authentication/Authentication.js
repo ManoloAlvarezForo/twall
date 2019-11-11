@@ -162,7 +162,7 @@ const styles = {
   },
   brandLabel: {
     fontFamily: 'Pacifico',
-    fontSize: '5rem',
+    fontSize: '3rem',
     fontWeight: 'normal'
   },
   secondBrandLabel: {

@@ -14,6 +14,8 @@ import ADD_EVENT from './EventMutations';
 import DialogDetail from './DialogDetail';
 import EventDetailContent from './EventDetailContent';
 import CalendarEvent from './CalendarEvent';
+import FullScreenDialog from '../Dialogs/FullScreenDialog';
+import PreachingContent from '../EventsContainers/PreachingContent';
 
 moment.locale('es');
 
@@ -41,7 +43,7 @@ const styles = theme => ({
  * @param {Func} onOver Event when the component is over.
  * @param {Func} eventClick Event when the component is clicked.
  */
-const getEventsByDate = (events, date, onLeave, onOver, eventClick) => {
+const addEventsByDate = (events, date, onLeave, eventClick) => {
   return events
     .filter(e => e.date === date)
     .map(eventDate => {
@@ -50,7 +52,6 @@ const getEventsByDate = (events, date, onLeave, onOver, eventClick) => {
           <CalendarEvent
             key={calendarEvent.id}
             onLeave={onLeave}
-            onOver={onOver}
             calendarEvent={calendarEvent}
             eventClick={eventClick}
           />
@@ -59,33 +60,15 @@ const getEventsByDate = (events, date, onLeave, onOver, eventClick) => {
     });
 };
 
-/**
- * Drawes a Grid with rows and columns (cells) for the Month Calendar.
- *
- * @param {object} object With options for the Month Calendar
- */
-const EventGridList = ({
-  events,
-  days,
+const CustomGridList = ({
   classes,
-  setOpenNewEventDialog,
-  setSelectedDate,
-  setOpenDetailEventDialog,
-  setSelectedCalendarEvent
+  days,
+  hoverCell,
+  events,
+  onEventClick,
+  onClickCalendarCell,
+  setHoverCell
 }) => {
-  const [hoverCell, setHoverCell] = useState('tile-calendar');
-
-  const onEventClick = (e, calendarEvent) => {
-    e.stopPropagation();
-    setSelectedCalendarEvent(calendarEvent);
-    setOpenDetailEventDialog(true);
-  };
-
-  const onClickCalendarCell = date => {
-    setSelectedDate(date);
-    setOpenNewEventDialog(true);
-  };
-
   return (
     <GridList
       style={{ padding: '3px 5px' }}
@@ -109,13 +92,13 @@ const EventGridList = ({
             <Typography style={{ margin: 0 }} variant="body2" gutterBottom>
               {item.format('D')}
             </Typography>
-            {getEventsByDate(
-              events,
-              item.format('YYYY-MM-DD'),
-              () => setHoverCell('tile-calendar'),
-              () => setHoverCell(''),
-              onEventClick
-            )}
+            {events.length > 0 &&
+              addEventsByDate(
+                events,
+                item.format('YYYY-MM-DD'),
+                () => setHoverCell('tile-calendar'),
+                onEventClick
+              )}
           </GridListTile>
         );
       })}
@@ -123,11 +106,60 @@ const EventGridList = ({
   );
 };
 
+CustomGridList.propTypes = {
+  days: PropTypes.instanceOf(Array).isRequired,
+  classes: PropTypes.instanceOf(Object).isRequired,
+  events: PropTypes.instanceOf(Array).isRequired,
+  setHoverCell: PropTypes.func.isRequired,
+  onEventClick: PropTypes.func.isRequired,
+  hoverCell: PropTypes.string.isRequired,
+  onClickCalendarCell: PropTypes.func.isRequired
+};
+
+/**
+ * Drawes a Grid with rows and columns (cells) for the Month Calendar.
+ *
+ * @param {object} object With options for the Month Calendar
+ */
+const EventGridList = ({
+  events,
+  days,
+  classes,
+  setOptionsDialog,
+  setSelectedDate,
+  setOpenDetailEventDialog,
+  setSelectedCalendarEvent
+}) => {
+  const [hoverCell, setHoverCell] = useState('tile-calendar');
+
+  const onEventClick = (e, calendarEvent) => {
+    e.stopPropagation();
+    setSelectedCalendarEvent(calendarEvent);
+    setOpenDetailEventDialog(true);
+  };
+  const onClickCalendarCell = date => {
+    setSelectedDate(date);
+    setOptionsDialog(true);
+  };
+
+  return (
+    <CustomGridList
+      days={days}
+      classes={classes}
+      events={events}
+      hoverCell={hoverCell}
+      onEventClick={onEventClick}
+      onClickCalendarCell={onClickCalendarCell}
+      setHoverCell={setHoverCell}
+    />
+  );
+};
+
 EventGridList.propTypes = {
   events: PropTypes.instanceOf(Array),
   days: PropTypes.instanceOf(Array),
   classes: PropTypes.instanceOf(Object),
-  setOpenNewEventDialog: PropTypes.func,
+  setOptionsDialog: PropTypes.func,
   setSelectedDate: PropTypes.func,
   setOpenDetailEventDialog: PropTypes.func,
   setSelectedCalendarEvent: PropTypes.func
@@ -137,19 +169,19 @@ EventGridList.defaultProps = {
   events: [],
   days: [],
   classes: {},
-  setOpenNewEventDialog: () => {},
+  setOptionsDialog: () => {},
   setSelectedDate: () => {},
   setOpenDetailEventDialog: () => {},
   setSelectedCalendarEvent: () => {}
 };
 
-const EventContainer = ({
+const EventsContainer = ({
   month,
   year,
   locale,
   daysPerMonth,
   classes,
-  setOpenNewEventDialog,
+  setOptionsDialog,
   setSelectedDate,
   setOpenDetailEventDialog,
   setSelectedCalendarEvent
@@ -164,15 +196,15 @@ const EventContainer = ({
       {({ loading, error, data }) => {
         if (loading) return <div />;
         if (error) {
-          return <div>{`Message [${error}]`}</div>;
+          return <div>Error to get Events {error}</div>;
         }
 
         return (
           <EventGridList
-            events={data.calendarEventsByMonth}
+            events={data.getEventsByMonth}
             days={getDatesFromToByMonth(month, year, locale, daysPerMonth)}
             classes={classes}
-            setOpenNewEventDialog={setOpenNewEventDialog}
+            setOptionsDialog={setOptionsDialog}
             setOpenDetailEventDialog={setOpenDetailEventDialog}
             setSelectedCalendarEvent={setSelectedCalendarEvent}
             setSelectedDate={setSelectedDate}
@@ -183,25 +215,22 @@ const EventContainer = ({
   );
 };
 
-EventContainer.propTypes = {
-  month: PropTypes.string,
-  year: PropTypes.string,
-  locale: PropTypes.string,
+EventsContainer.propTypes = {
+  month: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
+  locale: PropTypes.string.isRequired,
   daysPerMonth: PropTypes.number,
   classes: PropTypes.instanceOf(Object),
-  setOpenNewEventDialog: PropTypes.func,
+  setOptionsDialog: PropTypes.func,
   setSelectedDate: PropTypes.func,
   setOpenDetailEventDialog: PropTypes.func,
   setSelectedCalendarEvent: PropTypes.func
 };
 
-EventContainer.defaultProps = {
-  month: '',
-  year: '',
-  locale: '',
+EventsContainer.defaultProps = {
   daysPerMonth: 0,
   classes: {},
-  setOpenNewEventDialog: () => {},
+  setOptionsDialog: () => {},
   setSelectedDate: () => {},
   setOpenDetailEventDialog: () => {},
   setSelectedCalendarEvent: () => {}
@@ -233,9 +262,11 @@ const WeekNameGrid = ({ weekdays }) => {
                 height: '25px',
                 display: 'flex',
                 alignSelf: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                textTransform: 'capitalize',
+                fontWeight: 'bold'
               }}
-              variant="subtitle1"
+              variant="body2"
               gutterBottom
             >
               {weekName}
@@ -248,11 +279,7 @@ const WeekNameGrid = ({ weekdays }) => {
 };
 
 WeekNameGrid.propTypes = {
-  weekdays: PropTypes.instanceOf(Array)
-};
-
-WeekNameGrid.defaultProps = {
-  weekdays: []
+  weekdays: PropTypes.instanceOf(Array).isRequired
 };
 
 /**
@@ -336,19 +363,11 @@ const SaveEventMutation = ({
 };
 
 SaveEventMutation.propTypes = {
-  data: PropTypes.instanceOf(Object),
-  setOpenDialog: PropTypes.func,
-  month: PropTypes.string,
-  year: PropTypes.string,
-  locale: PropTypes.string
-};
-
-SaveEventMutation.defaultProps = {
-  data: {},
-  setOpenDialog: () => {},
-  month: '',
-  year: '',
-  locale: ''
+  data: PropTypes.instanceOf(Object).isRequired,
+  setOpenDialog: PropTypes.func.isRequired,
+  month: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
+  locale: PropTypes.string.isRequired
 };
 
 /**
@@ -359,65 +378,98 @@ SaveEventMutation.defaultProps = {
  * @param {*} dialogForm That represent a DialogForm to add new Calendar Events.
  * @param {*} dialogContent That represent the AddEventComponent Content.
  */
-const MonthCalendar = ({
-  data,
-  classes,
-  dialogForm: DialogForm,
-  dialogContent: AddEventComponent
-}) => {
-  const [month, setMonth] = useState(data.get('month'));
-  const [year] = useState(data.get('year'));
+const MonthCalendar = ({ data, classes, optionsDialog: OptionsDialog }) => {
+  const [month, setMonth] = useState(data.get('month').toString());
+  const [year] = useState(data.get('year').toString());
   const [selectedDate, setSelectedDate] = useState(moment());
-  const [locale] = useState(moment().locale());
+  // const [locale] = useState(moment().locale('es'));
   const [weekdays] = useState(moment.weekdays());
   const [daysPerMonth] = useState(35);
-  const [openNewEventDialog, setOpenNewEventDialog] = useState(false);
+  const [optionsDialog, setOptionsDialog] = useState(false);
   const [openDetaiEventlDialog, setOpenDetailEventDialog] = useState(false);
   const [selectedCalendarEvent, setSelectedCalendarEvent] = useState({});
+  // const [inputData, setInputData] = useState({});
+  const [openPreachingDialog, setOpenPreachingDialog] = useState(false);
+  // const [openPreachingDialog, setOpenFullScreenDialog] = useState(false);
+  // const [openPreachingDialog, setOpenFullScreenDialog] = useState(false);
+  // const [openPreachingDialog, setOpenFullScreenDialog] = useState(false);
 
-  const initDataModel = {
-    title: '',
-    date: '',
-    timeFrom: '',
-    timeTo: '',
-    participants: [],
-    description: ''
-  };
+  const options = [
+    {
+      id: 1,
+      title: 'Predicacion',
+      variant: 'preaching',
+      action: () => {
+        setOptionsDialog(false);
+        setOpenPreachingDialog(true);
+      }
+    },
+    {
+      id: 2,
+      title: 'Vida y Ministerio',
+      action: () => {
+        console.log('Vida y Ministerio');
+      }
+    },
+    {
+      id: 3,
+      title: 'Reunion Publica',
+      action: () => {
+        console.log('Reunion Publica');
+      }
+    },
+    {
+      id: 4,
+      title: 'Asamblea',
+      action: () => {
+        console.log('Asamblea');
+      }
+    }
+  ];
+
+  // const initDataModel = {
+  //   title: '',
+  //   date: '',
+  //   timeFrom: '',
+  //   timeTo: '',
+  //   participants: [],
+  //   description: ''
+  // };
   useEffect(() => {
-    setMonth(data.get('month'));
+    setMonth(data.get('month').toString());
   }, [data]);
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
       <WeekNameGrid weekdays={weekdays} />
-      <EventContainer
+      <EventsContainer
         month={month}
         year={year}
-        locale={locale}
+        locale="es"
         daysPerMonth={daysPerMonth}
         classes={classes}
-        setOpenNewEventDialog={setOpenNewEventDialog}
+        setOptionsDialog={setOptionsDialog}
         setOpenDetailEventDialog={setOpenDetailEventDialog}
         setSelectedCalendarEvent={setSelectedCalendarEvent}
         setSelectedDate={setSelectedDate}
       />
-      <DialogForm
+      <OptionsDialog
         selectedDate={selectedDate}
-        month={month}
-        year={year}
-        locale={locale}
-        title="Add Event"
-        dataModel={initDataModel}
-        open={openNewEventDialog}
-        setOpenDialog={setOpenNewEventDialog}
-        content={AddEventComponent}
-        saveMutation={SaveEventMutation}
+        title="Seleccionar opcion"
+        open={optionsDialog}
+        setOpenDialog={setOptionsDialog}
+        options={options}
       />
       <DialogDetail
         data={selectedCalendarEvent}
         content={EventDetailContent}
         open={openDetaiEventlDialog}
         setOpenDetailEventDialog={setOpenDetailEventDialog}
+      />
+      <FullScreenDialog
+        open={openPreachingDialog}
+        setOpen={setOpenPreachingDialog}
+        dialogContent={PreachingContent}
       />
     </div>
   );
@@ -426,15 +478,14 @@ const MonthCalendar = ({
 MonthCalendar.propTypes = {
   data: PropTypes.instanceOf(Object),
   classes: PropTypes.instanceOf(Object),
-  dialogForm: PropTypes.instanceOf(Object),
-  dialogContent: PropTypes.func
+  optionsDialog: PropTypes.instanceOf(Object).isRequired
+  // dialogForm: PropTypes.instanceOf(Object)
 };
 
 MonthCalendar.defaultProps = {
   data: {},
-  classes: {},
-  dialogForm: {},
-  dialogContent: () => {}
+  classes: {}
+  // dialogForm: {}
 };
 
 export default withStyles(styles)(MonthCalendar);

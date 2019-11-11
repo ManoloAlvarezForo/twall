@@ -4,6 +4,7 @@ import { FiUsers, FiLogOut, FiCalendar } from 'react-icons/fi';
 import { MdNotificationsNone } from 'react-icons/md';
 import PropTypes from 'prop-types';
 import ListItemWithIcon from './ListItemWithIcon';
+import { AUTH_TOKEN } from '../../constants/communication';
 
 const styles = {
   fontSize: {
@@ -29,7 +30,7 @@ const options = [
     variant: 'logout',
     path: '/logout',
     action: () => {
-      console.log('Logout');
+      localStorage.setItem(AUTH_TOKEN, '');
     }
   }
 ];

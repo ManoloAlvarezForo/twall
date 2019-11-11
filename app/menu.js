@@ -48,14 +48,14 @@ export default class MenuBuilder {
       label: 'Electron',
       submenu: [
         {
-          label: 'About TeocraticWall',
+          label: 'About TheocraticWall',
           selector: 'orderFrontStandardAboutPanel:'
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide TeocraticWall',
+          label: 'Hide TheocraticWall',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
